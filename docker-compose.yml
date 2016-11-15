@@ -1,0 +1,18 @@
+version: '2'
+services:
+ postgres:
+  build: 
+   context: .
+   dockerfile: ./docker/postgres/Dockerfile
+  env_file: .pg.env
+ ruby:
+  links:
+   - postgres
+  build:
+   context: .
+   dockerfile: ./docker/ruby/Dockerfile
+  volumes:
+   - ./:/home/dockeruser/project
+   - /usr/local/bundle # Сюда ставятся гемы в контейнере (можно использовать как кэш)
+  command:
+   bash -c "bundle install && bundle exec rails server -b 0.0.0.0"
