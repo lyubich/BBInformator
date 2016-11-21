@@ -1,0 +1,1 @@
+cd slack_connector && bundle exec ruby main.rb
