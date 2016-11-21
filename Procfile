@@ -1,1 +1,1 @@
-web: bundle exec ruby slack_connector/main.rb
+bundle exec ruby slack_connector/main.rb
