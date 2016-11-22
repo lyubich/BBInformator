@@ -2,7 +2,15 @@ version: '2'
 services:
  postgres:
   ports:
-   - '5432:5432'
+   - '5477:5432'
+  networks:
+   - slackconnector_ruby-net
  ruby:
   ports:
    - '3000:3000'
+  networks:
+   - slackconnector_ruby-net
+
+networks:
+ slackconnector_ruby-net:
+  external: true

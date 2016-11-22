@@ -6,8 +6,6 @@ services:
    dockerfile: ./docker/postgres/Dockerfile
   env_file: .pg.env
  ruby:
-  links:
-   - postgres
   build:
    context: .
    dockerfile: ./docker/ruby/Dockerfile
@@ -15,15 +13,5 @@ services:
    - ./:/home/dockeruser/project
    - /usr/local/bundle # Сюда ставятся гемы в контейнере (можно использовать как кэш)
   command:
-    /bin/bash -c "bundle install && bundle exec rails s -b 0.0.0.0"
+    /bin/bash -c "bundle install && rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
   env_file: .ruby.env
- bot:
-  build:
-   context: .
-   dockerfile: ./docker/slack_connector/Dockerfile
-  volumes:
-   - ./slack_connector:/home/dockeruser/project
-   - /usr/local/bundle # Сюда ставятся гемы в контейнере (можно использовать как кэш)
-  command:
-    /bin/bash -c "bundle install && bundle exec ruby main.rb"
-  env_file: .slack.env
