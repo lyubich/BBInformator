@@ -1,0 +1,2 @@
+class AddForeignKeyFromAdapterToUserOnUserId < ApplicationRecord
+end
