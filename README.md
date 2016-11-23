@@ -1,26 +1,60 @@
-# README
+# Slack bot server
+Part of slack bot application with bot logic
 
-1. Install Docker Engine (https://docs.docker.com/engine/installation/linux/ubuntulinux/ - Update your apt sources, Prerequisites by Ubuntu Version, Install, Create a Docker group)
-2. Install Docker Compose (https://docs.docker.com/compose/install/ - NOT PIP!!!)
-3. Copy .pg.env.template in .pg.env, and fill.
-4. Create docker-compose.override.yml (copy docker-compose.local.yml for LOCAL, copy docker-compose.production.yml for PRODACTION)
-In the project directory
-5. Create Dockerfile for postgresql in docker/postgres and for ruby, for slack_connector
-6. docker-compose build
-7. docker-compose run ruby /bin/bash -c "gem install rails && rails new"
-8. docker-compose up -d (sudo service postgresql stop, if need)
+**All next commands should be run from project root!**  
+**Text in "[]" bracers is optionals, if no text - apply for all**  
+**Text in "<>" bracers is required your own value**  
 
-Job with postgres
-1. docker-compose exec postgres bash
-2. psql -U username -W database
+### Preparing
 
-Job with migration
-1. docker-compose exec ruby bash
-2. Create model
-rails generate model User
-3. Start migrate
-rails db:migrate
+* for install docker-compose use guide https://docs.docker.com/compose/install/
+* copy .pg.env.template to .pg.env and fill it fields
+* copy docker-compose.local.yml for **local settings** or docker-compose.production.yml for **production settings** to docker-compose.override.yml
 
+### Local start connection
+For start container run command
+```console
+$ docker-compose build
+$ docker-compose up -d
+```
+
+### Restart container
+For restart containers run command
+```console
+$ docker-compose restart [container name]
+```
+
+### Check logs
+For check container logs run command
+```console
+$ docker-compose logs --tail=20 -f <container name>
+```
+
+### Stop connection
+For stop containers run command
+```console
+$ docoker-compose stop [container name]
+```
+
+### Database access
+For db access use command
+```console
+$ docker-compose exec postgres bash
+$ psql -U <username> -W <database   >
+```
+
+### Database migrations
+For create database migrations use
+```console
+$ docker-compose exec ruby bash
+$ rails generate model <your model>
+$ rails db:migrate
+```
+For run database migrations use
+```console
+$ docker-compose exec ruby bash
+$ rails db:migrate
+```
 
 
 
