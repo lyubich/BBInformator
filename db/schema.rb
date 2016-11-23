@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123083105) do
+ActiveRecord::Schema.define(version: 20161123145134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20161123083105) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index "((data -> 'slack_id'::text))", name: "index_adapter_on_data_slack_id", using: :gin
+    t.index "((data -> 'slack_name'::text))", name: "index_adapter_on_data_slack_name", using: :gin
   end
 
   create_table "users", force: :cascade do |t|

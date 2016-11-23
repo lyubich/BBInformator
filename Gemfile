@@ -50,6 +50,9 @@ gem 'slack-ruby-client'
 gem 'eventmachine'
 gem 'faye-websocket'
 
+# API ai client
+gem 'api-ai-ruby'
+
 # Use Active record as the
 gem 'activerecord'
 
