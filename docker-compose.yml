@@ -13,5 +13,5 @@ services:
    - ./:/home/dockeruser/project
    - /usr/local/bundle # Сюда ставятся гемы в контейнере (можно использовать как кэш)
   command:
-    /bin/bash -c "bundle install && rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    /bin/bash -c "bundle install && rm -f tmp/pids/server.pid && rails s -b 0.0.0.0"
   env_file: .ruby.env

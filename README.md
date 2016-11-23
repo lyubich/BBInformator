@@ -10,6 +10,7 @@ Part of slack bot application with bot logic
 * for install docker-compose use guide https://docs.docker.com/compose/install/
 * copy .pg.env.template to .pg.env and fill it fields
 * copy docker-compose.local.yml for **local settings** or docker-compose.production.yml for **production settings** to docker-compose.override.yml
+* copy _config/database.yml.template_ to _config/database.yml_ and fill it fields
 
 ### Local start containers
 For start containers run command
@@ -40,7 +41,7 @@ $ docoker-compose stop [container name]
 For db access use command
 ```console
 $ docker-compose exec postgres bash
-$ psql -U <username> -W <database   >
+$ psql -U <username> -W <database>
 ```
 
 ### Database migrations
