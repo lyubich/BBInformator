@@ -1,0 +1,2 @@
+class ChangeNameOfColumnInAdapter < ApplicationRecord
+end
