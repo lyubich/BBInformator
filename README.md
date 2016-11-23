@@ -11,14 +11,14 @@ Part of slack bot application with bot logic
 * copy .pg.env.template to .pg.env and fill it fields
 * copy docker-compose.local.yml for **local settings** or docker-compose.production.yml for **production settings** to docker-compose.override.yml
 
-### Local start connection
-For start container run command
+### Local start containers
+For start containers run command
 ```console
 $ docker-compose build
 $ docker-compose up -d
 ```
 
-### Restart container
+### Restart containers
 For restart containers run command
 ```console
 $ docker-compose restart [container name]
@@ -30,7 +30,7 @@ For check container logs run command
 $ docker-compose logs --tail=20 -f <container name>
 ```
 
-### Stop connection
+### Stop containers
 For stop containers run command
 ```console
 $ docoker-compose stop [container name]
