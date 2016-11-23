@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117115011) do
+ActiveRecord::Schema.define(version: 20161123083105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "adapters", force: :cascade do |t|
-    t.string   "type"
+    t.string   "adapter_type"
     t.integer  "user_id"
-    t.jsonb    "data",       default: {}
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.jsonb    "data",         default: {}
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index "((data -> 'slack_id'::text))", name: "index_adapter_on_data_slack_id", using: :gin
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,4 +30,5 @@ ActiveRecord::Schema.define(version: 20161117115011) do
     t.datetime "updated_at",              null: false
   end
 
+  add_foreign_key "adapters", "users"
 end

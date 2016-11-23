@@ -11,7 +11,8 @@ class Api::Slack::SlackController < ApplicationController
 
 
   def message
-    message_service.echo(params[:channel], params[:text], params[:subtype])
+    logger.info params
+    message_service.echo(params[:user], params[:channel], params[:text], params[:subtype])
   end
 
   def group_joined
