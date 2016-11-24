@@ -1,0 +1,2 @@
+class AddIndexToAdapterOnSlackName < ApplicationRecord
+end

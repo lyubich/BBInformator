@@ -1,11 +1,7 @@
 require 'slack-ruby-client'
 require 'json'
 
-class MessageService
-
-  def client
-    @@client ||= Slack::RealTime::Client.new
-  end
+class UserService
 
   private
 
@@ -16,7 +12,7 @@ class MessageService
                          skype: "#{user_info.user.profile.skype}",
                          phone: "#{user_info.user.profile.phone}"}
 
-    user_db = User.create(profile: user_profile_hash)
+    User.create(profile: user_profile_hash)
   end
 
   def create_adapter(user_info, adapter_type, user_id)
@@ -24,23 +20,22 @@ class MessageService
                          is_deleted: "#{user_info.user.deleted}", is_bot: "#{user_info.user.is_bot}",
                          is_admin: "#{user_info.user.is_admin}", is_owner: "#{user_info.user.is_owner}"}
 
-    adapter_db = Adapter.create(adapter_type: adapter_type, user_id: user_id, data: adapter_data_hash)
+    Adapter.create(adapter_type: adapter_type, user_id: user_id, data: adapter_data_hash)
+  end
+
+  def client
+    @@client ||= SlackClientService.new
   end
 
 
   public
 
-  def echo (user, channel, text, subtype)
-    if subtype != 'bot_message'
-      current_user = Adapter.where("data ->> 'slack_id' = '#{user}'").where(adapter_type: "slack")
-      if (current_user == [])
-        user_info = client.web_client.users_info user: user
-        new_user = create_user(user_info)
-        create_adapter(user_info, "slack", new_user.id)
-      end
-
-      client.web_client.chat_postMessage channel: channel, text: text
+  def add_new_user (user)
+    current_user = Adapter.where("data ->> 'slack_id' = '#{user}'").where(adapter_type: "slack")
+    if current_user.empty?
+      user_info = client.web_client.users_info user: user
+      new_user = create_user(user_info)
+      create_adapter(user_info, "slack", new_user.id)
     end
-
   end
 end

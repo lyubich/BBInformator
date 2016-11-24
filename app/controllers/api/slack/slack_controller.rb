@@ -1,8 +1,12 @@
 class Api::Slack::SlackController < ApplicationController
   skip_before_filter :verify_authenticity_token
 
-  def message_service
-    @@message_service ||= MessageService.new
+  def strategy_router
+    @@strategy_router ||= StrategyRouter.new
+  end
+
+  def slack_client
+    @@slack_client ||= SlackClientService.new
   end
 
   def group_joined_service
@@ -12,7 +16,8 @@ class Api::Slack::SlackController < ApplicationController
 
   def message
     logger.info params
-    message_service.echo(params[:user], params[:channel], params[:text], params[:subtype])
+    text = strategy_router.handle_request(params)
+    slack_client.client.web_client.chat_postMessage channel: params[:channel], text: text
   end
 
   def group_joined
