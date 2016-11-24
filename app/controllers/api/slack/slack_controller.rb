@@ -5,8 +5,8 @@ class Api::Slack::SlackController < ApplicationController
     @@strategy_router ||= StrategyRouter.new
   end
 
-  def client
-    @@client ||= SlackClientService.new
+  def slack_client
+    @@slack_client ||= SlackClientService.new
   end
 
   def group_joined_service
@@ -17,7 +17,7 @@ class Api::Slack::SlackController < ApplicationController
   def message
     logger.info params
     text = strategy_router.handle_request(params)
-    client.client.web_client.chat_postMessage channel: params[:channel], text: text
+    slack_client.client.web_client.chat_postMessage channel: params[:channel], text: text
   end
 
   def group_joined
