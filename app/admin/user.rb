@@ -12,7 +12,7 @@ ActiveAdmin.register User do
 
   form do |f|
     f.inputs "Profile Details" do
-      f.input :profile, as: :text
+      f.input :profile, as: :text, input_html: { class: 'jsoneditor-target' }
     end
     f.actions
   end

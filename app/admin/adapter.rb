@@ -15,7 +15,7 @@ ActiveAdmin.register Adapter do
   form do |f|
     f.inputs "Adapter Details" do
       f.input :adapter_type
-      f.input :data, as: :text
+      f.input :data, as: :text, input_html: { class: 'jsoneditor-target' }
     end
     f.actions
   end
