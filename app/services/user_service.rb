@@ -1,5 +1,4 @@
 require 'slack-ruby-client'
-require 'json'
 
 class UserService
 
