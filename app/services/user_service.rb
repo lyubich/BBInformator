@@ -34,8 +34,10 @@ class UserService
     current_user = Adapter.where("data ->> 'slack_id' = '#{user}'").where(adapter_type: "slack")
     if current_user.empty?
       user_info = slack_client.client.web_client.users_info user: user
-      new_user = create_user(user_info)
-      create_adapter(user_info, "slack", new_user.id)
+      transaction do
+        new_user = create_user(user_info)
+        create_adapter(user_info, "slack", new_user.id)
+      end
     end
   end
 end
