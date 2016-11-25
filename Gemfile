@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -59,5 +60,20 @@ gem 'activerecord'
 # Use Postgresql as the database for Active Record
 gem 'pg'
 
-# Use
+# Use JSON
 gem 'json'
+
+# Use Active admin
+gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin', '~> 1.0.0.pre4'
+
+gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+
+# Plus integrations with:
+gem 'devise'
+gem 'cancan' # or cancancan
+gem 'draper', github: 'audionerd/draper', branch: 'rails5'
+gem 'pundit'
+
+
+
