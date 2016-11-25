@@ -48,7 +48,7 @@ class StrategyRouter
     end
     separated_text = data[:text].split(' ')
     not_person = separated_text[0] != "<@#{ENV['BOT_ID']}>"
-    separated_text.delete(0) unless not_person
+    separated_text.delete_at(0) unless not_person
     if data[:channel][0] != DIALOG_CHANNEL and not_person
       result = false
     end
