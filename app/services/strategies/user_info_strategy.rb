@@ -2,24 +2,32 @@
 class UserInfoStrategy
   NOT_FOUND_MESSAGE = "Не знаю такого"
 
-  def get_phone_number(apiai_data, message_data)
-    user = fetch_user_info(apiai_data[:parameters]['given-name'.to_sym])
+  def get_phone_number(adapter_id, speech)
+    user = fetch_user_info(adapter_id)
 
     return  NOT_FOUND_MESSAGE unless user
 
-    "#{apiai_data[:fulfillment][:speech]} - #{user.profile["phone"]}"
+    "#{speech} - #{user.profile['phone']}"
   end
 
-  def get_user_info(apiai_data, message_data)
-    user = fetch_user_info(apiai_data[:parameters]['given-name'.to_sym])
+  def get_user_info(adapter_id, speech)
+    user = fetch_user_info(adapter_id)
 
     return NOT_FOUND_MESSAGE unless user
 
-    message = "#{apiai_data[:fulfillment][:speech]}:\r\n"
+    message = "#{speech}:\r\n"
     user.profile.each do |k, v|
       message << "#{k} - #{v}\r\n"
     end
     message
+  end
+
+  def get_user_birthday(adapter_id, speech)
+    user = fetch_user_info(adapter_id)
+
+    return NOT_FOUND_MESSAGE unless user
+
+    "#{speech} - #{user.profile['birthday']}"
   end
 
   def fetch_user_info(adapter_id)

@@ -15,12 +15,14 @@ class StrategyRouter
   def strategies
     @@strategies ||= {
       get_phone_number: user_info_strategy.method(:get_phone_number),
-      get_user_info: user_info_strategy.method(:get_user_info)
+      get_user_info: user_info_strategy.method(:get_user_info),
+      get_user_birthday: user_info_strategy.method(:get_user_birthday)
     }
   end
 
   DIALOG_CHANNEL = "D"
   UNRECOGNIZED_QUERY_MESSAGE = "Мая не панимать((("
+  SUCCESS_RESPONSE_CODE = 200
 
   def handle_request(data)
     is_respond, text = respond_on_message?(data)
@@ -29,9 +31,10 @@ class StrategyRouter
         @user_service.add_new_user(data[:user])
       end
       response = @apiai_service.client.text_request text
-      if response[:status][:code] == 200
+      if response[:status][:code] == SUCCESS_RESPONSE_CODE
         if strategies[response[:result][:action].to_sym]
-          strategies[response[:result][:action].to_sym].call(response[:result], data)
+          strategies[response[:result][:action].to_sym].call(
+              response[:parameters]['given-name'.to_sym], response[:fulfillment][:speech])
         else
           DefaultStrategy::default_strategy(response[:result])
         end
