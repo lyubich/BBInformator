@@ -49,7 +49,6 @@ class StrategyRouter
         @user_service.add_new_user(data[:user])
       end
       response = @apiai_service.client.text_request text
-      puts "============================", response
       if response[:status][:code] == SUCCESS_RESPONSE_CODE
         result = response[:result]
         if strategies[result[:action].to_sym]
