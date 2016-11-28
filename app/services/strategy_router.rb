@@ -18,7 +18,8 @@ class StrategyRouter
     @@strategies ||= {
       get_phone_number: user_info_strategy.method(:get_phone_number),
       get_user_info: user_info_strategy.method(:get_user_info),
-      get_user_birthday: user_info_strategy.method(:get_user_birthday)
+      get_user_birthday: user_info_strategy.method(:get_user_birthday),
+      get_user_skype: user_info_strategy.method(:get_skype)
     }
   end
 

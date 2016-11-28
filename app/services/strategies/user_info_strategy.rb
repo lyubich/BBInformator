@@ -1,13 +1,13 @@
 
 class UserInfoStrategy
   NOT_FOUND_MESSAGE = "Не знаю такого"
-  PHONE_IS_NOT_SET = "Не знаю его номера"
+  FIELD_IS_NOT_SET = "Нашёл пустое поле("
   UNKNOWN = "не знаю"
 
   def get_phone_number(adapter_id, speech)
     user = fetch_user_info(adapter_id)
     return NOT_FOUND_MESSAGE unless user
-    return PHONE_IS_NOT_SET if user.profile['phone'].empty?
+    return FIELD_IS_NOT_SET if user.profile['phone'].empty?
     "#{speech} - #{user.profile['phone']}"
   end
 
@@ -27,7 +27,15 @@ class UserInfoStrategy
   def get_user_birthday(adapter_id, speech)
     user = fetch_user_info(adapter_id)
     return NOT_FOUND_MESSAGE unless user
+    return FIELD_IS_NOT_SET if user.profile['birthday'].empty?
     "#{speech} - #{user.profile['birthday']}"
+  end
+
+  def get_skype(adapter_id, speech)
+    user = fetch_user_info adapter_id
+    return NOT_FOUND_MESSAGE unless user
+    return FIELD_IS_NOT_SET if user.profile['skype'].empty?
+    "#{speech} - #{user.profile['skype']}"
   end
 
   private

@@ -9,7 +9,8 @@ class UserService
                          last_name: "#{user_info.user.profile.last_name}",
                          email: "#{user_info.user.profile.email}",
                          skype: "#{user_info.user.profile.skype}",
-                         phone: "#{user_info.user.profile.phone}"}
+                         phone: "#{user_info.user.profile.phone}",
+                         birthday: ""}
 
     User.create(profile: user_profile_hash)
   end
