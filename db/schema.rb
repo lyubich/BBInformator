@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124092552) do
+ActiveRecord::Schema.define(version: 20161128105546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20161124092552) do
     t.jsonb    "profile",    default: {}
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.index "((profile -> 'birthday'::text))", name: "index_user_on_profile_birthday", using: :gin
   end
 
   add_foreign_key "adapters", "users"
