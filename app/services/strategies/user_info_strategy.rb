@@ -16,17 +16,14 @@ class UserInfoStrategy
 
     message = "#{speech}:\r\n"
     user.profile.each do |k, v|
-      field = v.empty? ? UNKNOWN : v
-      message << "#{k} - #{field}\r\n"
+      message << "#{k} - #{v}\r\n"
     end
     message
   end
 
   def get_user_birthday(adapter_id, speech)
     user = fetch_user_info(adapter_id)
-    return NOT_FOUND_MESSAGE unless user
-    return FIELD_IS_NOT_SET if user.profile['birthday'].empty?
-    "#{speech} - #{user.profile['birthday']}"
+    check_user_data(user, 'birthday', speech)
   end
 
   def get_skype(adapter_id, speech)
@@ -48,7 +45,7 @@ class UserInfoStrategy
 
   def check_user_data(user, field, text)
     return NOT_FOUND_MESSAGE unless user
-    return FIELD_IS_NOT_SET if user.profile[field].empty?
+    return FIELD_IS_NOT_SET unless user.profile[field]
     "#{text} - #{user.profile[field]}"
   end
 end

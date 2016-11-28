@@ -5,14 +5,11 @@ class UserService
   private
 
   def create_user(user_info)
-    user_profile_hash = {first_name: "#{user_info.user.profile.first_name}",
-                         last_name: "#{user_info.user.profile.last_name}",
-                         email: "#{user_info.user.profile.email}",
-                         skype: "#{user_info.user.profile.skype}",
-                         phone: "#{user_info.user.profile.phone}",
-                         birthday: ""}
-
-    User.create(profile: user_profile_hash)
+    user_profile = {}
+    user_info.user.profile.each do |k, v|
+      user_profile[k.to_sym] = v unless v.empty?
+    end
+    User.create(profile: user_profile)
   end
 
   def create_adapter(user_info, adapter_type, user_id)
