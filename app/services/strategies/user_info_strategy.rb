@@ -2,7 +2,7 @@
 class UserInfoStrategy
   NOT_FOUND_MESSAGE = "Не знаю такого"
   PHONE_IS_NOT_SET = "Не знаю его номера"
-  NOT_KNOWN = "не знаю"
+  UNKNOWN = "не знаю"
 
   def get_phone_number(adapter_id, speech)
     user = fetch_user_info(adapter_id)
@@ -18,7 +18,7 @@ class UserInfoStrategy
 
     message = "#{speech}:\r\n"
     user.profile.each do |k, v|
-      field = v.empty? ? NOT_KNOWN : v
+      field = v.empty? ? UNKNOWN : v
       message << "#{k} - #{field}\r\n"
     end
     message
