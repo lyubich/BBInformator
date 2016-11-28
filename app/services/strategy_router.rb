@@ -9,7 +9,7 @@ class StrategyRouter
   end
 
   private
-  
+
   def user_info_strategy
     @@user_info_strategy ||= UserInfoStrategy.new
   end
@@ -49,10 +49,12 @@ class StrategyRouter
         @user_service.add_new_user(data[:user])
       end
       response = @apiai_service.client.text_request text
+      puts "============================", response
       if response[:status][:code] == SUCCESS_RESPONSE_CODE
-        if strategies[response[:result][:action].to_sym]
-          strategies[response[:result][:action].to_sym].call(
-              response[:parameters]['given-name'.to_sym], response[:fulfillment][:speech])
+        result = response[:result]
+        if strategies[result[:action].to_sym]
+          strategies[result[:action].to_sym].call(
+              result[:parameters]['given-name'.to_sym], result[:fulfillment][:speech])
         else
           DefaultStrategy::default_strategy(response[:result])
         end
