@@ -8,6 +8,8 @@ class StrategyRouter
     @user_service = UserService.new
   end
 
+  private
+  
   def user_info_strategy
     @@user_info_strategy ||= UserInfoStrategy.new
   end
@@ -23,6 +25,22 @@ class StrategyRouter
   DIALOG_CHANNEL = "D"
   UNRECOGNIZED_QUERY_MESSAGE = "Мая не панимать((("
   SUCCESS_RESPONSE_CODE = 200
+
+  def respond_on_message?(data)
+    result = true
+    if data[:subtype] == 'bot_message'
+      result = false
+    end
+    separated_text = data[:text].split(' ')
+    not_person = separated_text[0] != "<@#{ENV['BOT_ID']}>"
+    separated_text.delete_at(0) unless not_person
+    if data[:channel][0] != DIALOG_CHANNEL and not_person
+      result = false
+    end
+    return result, separated_text.join(' ')
+  end
+
+  public
 
   def handle_request(data)
     is_respond, text = respond_on_message?(data)
@@ -42,19 +60,5 @@ class StrategyRouter
         UNRECOGNIZED_QUERY_MESSAGE
       end
     end
-  end
-
-  def respond_on_message?(data)
-    result = true
-    if data[:subtype] == 'bot_message'
-      result = false
-    end
-    separated_text = data[:text].split(' ')
-    not_person = separated_text[0] != "<@#{ENV['BOT_ID']}>"
-    separated_text.delete_at(0) unless not_person
-    if data[:channel][0] != DIALOG_CHANNEL and not_person
-      result = false
-    end
-    return result, separated_text.join(' ')
   end
 end
