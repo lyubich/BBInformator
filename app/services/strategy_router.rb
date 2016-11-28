@@ -48,7 +48,7 @@ class StrategyRouter
       if data[:user]
         @user_service.add_new_user(data[:user])
       end
-      response = @apiai_service.client.text_request text
+      response = @apiai_service.client.text_request text, resetContexts: true
       if response[:status][:code] == SUCCESS_RESPONSE_CODE
         result = response[:result]
         if strategies[result[:action].to_sym]
