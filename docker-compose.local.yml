@@ -10,6 +10,11 @@ services:
    - '3000:3000'
   networks:
    - slackconnector_ruby-net
+ redis:
+  ports:
+   - '6379:6379'
+  networks:
+   - slackconnector_ruby-net
 
 networks:
  slackconnector_ruby-net:

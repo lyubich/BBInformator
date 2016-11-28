@@ -17,7 +17,9 @@ class Api::Slack::SlackController < ApplicationController
   def message
     logger.info params
     text = strategy_router.handle_request(params)
-    slack_client.client.web_client.chat_postMessage channel: params[:channel], text: text
+    if text
+      slack_client.client.web_client.chat_postMessage channel: params[:channel], text: text
+    end
   end
 
   def group_joined
