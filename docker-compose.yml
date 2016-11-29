@@ -1,10 +1,5 @@
 version: '2'
 services:
- postgres:
-  build:
-   context: .
-   dockerfile: ./docker/postgres/Dockerfile
-  env_file: .pg.env
  ruby:
   build:
    context: .
@@ -13,12 +8,33 @@ services:
    - redis
   volumes:
    - ./:/home/dockeruser/project
-   - /usr/local/bundle # Сюда ставятся гемы в контейнере (можно использовать как кэш)
+   - /usr/local/bundle
   command:
     /bin/bash -c "bundle install && rm -f tmp/pids/server.pid && rails s -b 0.0.0.0"
   env_file: .ruby.env
+
+ sidekiq:
+  build:
+   context: .
+   dockerfile: ./docker/ruby/Dockerfile
+  depends_on:
+   - redis
+  volumes:
+   - ./:/home/dockeruser/project
+   - /usr/local/bundle
+  command:
+    /bin/bash -c "bundle install && bundle exec sidekiq"
+  env_file: .ruby.env
+
  redis:
   image: 'bitnami/redis:latest'
   build:
    context: .
    dockerfile: ./docker/redis/Dockerfile
+
+ postgres:
+  build:
+   context: .
+   dockerfile: ./docker/postgres/Dockerfile
+  env_file: .pg.env
+

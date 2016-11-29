@@ -1,5 +1,6 @@
 require 'strategies/user_info_strategy'
 require 'strategies/default_strategy'
+require 'strategies/help_strategy'
 
 class StrategyRouter
 
@@ -14,13 +15,18 @@ class StrategyRouter
     @@user_info_strategy ||= UserInfoStrategy.new
   end
 
+  def help_strategy
+    @@help_strategy ||= HelpStrategy.new
+  end
+
   def strategies
     @@strategies ||= {
       get_phone_number: user_info_strategy.method(:get_phone_number),
       get_user_info: user_info_strategy.method(:get_user_info),
       get_user_birthday: user_info_strategy.method(:get_user_birthday),
       get_user_skype: user_info_strategy.method(:get_skype),
-      get_user_email: user_info_strategy.method(:get_email)
+      get_user_email: user_info_strategy.method(:get_email),
+      get_help: help_strategy.method(:get_help)
     }
   end
 
