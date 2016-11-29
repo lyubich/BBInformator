@@ -4,14 +4,16 @@ class UserService
 
   private
 
-  def create_user(user_info)
-    user_profile_hash = {first_name: "#{user_info.user.profile.first_name}",
-                         last_name: "#{user_info.user.profile.last_name}",
-                         email: "#{user_info.user.profile.email}",
-                         skype: "#{user_info.user.profile.skype}",
-                         phone: "#{user_info.user.profile.phone}"}
+  def slack_client
+    @@slack_client ||= SlackClientService.new
+  end
 
-    User.create(profile: user_profile_hash)
+  def create_user(user_info)
+    user_profile = {}
+    user_info.user.profile.each do |k, v|
+      user_profile[k.to_sym] = v unless v.empty?
+    end
+    User.create(profile: user_profile)
   end
 
   def create_adapter(user_info, adapter_type, user_id)
@@ -22,21 +24,37 @@ class UserService
     Adapter.create(adapter_type: adapter_type, user_id: user_id, data: adapter_data_hash)
   end
 
-  def slack_client
-    @@slack_client ||= SlackClientService.new
+  def create_user_and_adapter(user_info)
+    ActiveRecord::Base.transaction do
+      new_user = create_user(user_info)
+      create_adapter(user_info, "slack", new_user.id)
+    end
   end
-
 
   public
 
-  def add_new_user(user)
-    current_user = Adapter.where("data ->> 'slack_id' = '#{user}'").where(adapter_type: "slack")
-    if current_user.empty?
-      user_info = slack_client.client.web_client.users_info user: user
-      ActiveRecord::Base.transaction do
-        new_user = create_user(user_info)
-        create_adapter(user_info, "slack", new_user.id)
-      end
+  def add_new_user(adapter_id)
+    adapter = Adapter.where("data ->> 'slack_id' = '#{adapter_id}'").where(adapter_type: "slack")
+    unless adapter
+      user_info = slack_client.client.web_client.users_info(user: adapter_id)
+      create_user_and_adapter(user_info)
+    end
+  end
+
+  def upsert_user(adapter_id, data)
+    current_user = User.joins("INNER JOIN adapters ON users.id = adapters.user_id")
+                       .where("data ->> 'slack_id' = '#{adapter_id}'")
+                       .where("adapter_type = 'slack'")
+                       .select(:id, :profile)[0]
+    user_info = current_user['profile']
+    data.each do |k, v|
+      user_info[k] = v unless v.empty?
+    end
+    user_info.delete('fields')
+    if current_user
+      User.update(current_user['id'], profile: user_info)
+    else
+      create_user_and_adapter(user_info)
     end
   end
 end

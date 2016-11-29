@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     namespace :slack do
       post '/message', to: 'slack#message', as: :message
       post '/group-joined', to: 'slack#group_joined', as: :group_joined
+      post '/user-change', to: 'slack#user_change', as: :user_change
+      post '/team-join', to: 'slack#team_join', as: :team_join
     end
   end
 end
