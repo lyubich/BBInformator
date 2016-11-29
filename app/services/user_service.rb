@@ -24,10 +24,6 @@ class UserService
     Adapter.create(adapter_type: adapter_type, user_id: user_id, data: adapter_data_hash)
   end
 
-  def fetch_adapter(adapter_id)
-    Adapter.where("data ->> 'slack_id' = '#{adapter_id}'").where(adapter_type: "slack")
-  end
-
   def create_user_and_adapter(user_info)
     ActiveRecord::Base.transaction do
       new_user = create_user(user_info)
@@ -35,16 +31,12 @@ class UserService
     end
   end
 
-  def fetch_slack_user_data(user_id)
-    slack_client.client.web_client.users_info(user: user_id)
-  end
-
   public
 
   def add_new_user(adapter_id)
-    current_user = fetch_adapter(adapter_id)
-    unless current_user
-      user_info = fetch_slack_user_data(adapter_id)
+    adapter = Adapter.where("data ->> 'slack_id' = '#{adapter_id}'").where(adapter_type: "slack")
+    unless adapter
+      user_info = slack_client.client.web_client.users_info(user: adapter_id)
       create_user_and_adapter(user_info)
     end
   end
@@ -60,7 +52,7 @@ class UserService
     end
     user_info.delete('fields')
     if current_user
-      user = User.update(current_user['id'], profile: user_info)
+      User.update(current_user['id'], profile: user_info)
     else
       create_user_and_adapter(user_info)
     end
