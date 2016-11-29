@@ -3,6 +3,6 @@ class User < ApplicationRecord
 
   protected
   def convert_to_json
-    self.profile = JSON.parse(self.profile)
+    self.profile = JSON.parse(profile) if profile.is_a?(String)
   end
 end

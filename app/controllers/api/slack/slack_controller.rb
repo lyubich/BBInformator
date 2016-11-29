@@ -1,8 +1,14 @@
 class Api::Slack::SlackController < ApplicationController
   skip_before_filter :verify_authenticity_token
 
+  private
+
   def strategy_router
     @@strategy_router ||= StrategyRouter.new
+  end
+
+  def user_service
+    @@user_service ||= UserService.new
   end
 
   def slack_client
@@ -13,6 +19,7 @@ class Api::Slack::SlackController < ApplicationController
     @@group_joined_service ||= GroupJoinedService.new
   end
 
+  public
 
   def message
     logger.info params
@@ -24,5 +31,13 @@ class Api::Slack::SlackController < ApplicationController
 
   def group_joined
     group_joined_service.greetings(params[:channel][:id])
+  end
+
+  def team_join
+    user_service.add_new_user(params[:user])
+  end
+
+  def user_change
+    user_service.upsert_user(params[:user][:id], params[:user][:profile])
   end
 end
